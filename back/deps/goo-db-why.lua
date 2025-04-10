@@ -31,22 +31,6 @@ local function read_decoded(path)
     return json.decode(json_data)
 end
 
-local function get_ids(path)
-    local get_next_file = fs.scandir(path)
-    local ids = {}
-
-    while true do
-        local entry = get_next_file()
-
-        if not entry then break end                                            -- Break loop if we can't find a file
-
-        table.insert(ids, entry.name:sub(0, #entry.name - 5))
-    end
-
-    table.sort(ids)
-    return ids
-end
-
 --+ GOODBWHY +--
 
 local goodbwhy = {}
@@ -77,10 +61,33 @@ function goodbwhy.dir:insert(data, id)
     if id then
         write_file(goodbwhy.container .. "/" .. self.path .. "/" .. id .. ".json", json_data)
     else
-        local next_id = get_ids()[#get_ids(goodbwhy.container .. "/" .. self.path)] + 1
+        local ids = self:get_ids()
+        local next_id
+
+        if #ids > 0 then
+            next_id = ids[#ids] + 1
+        else
+            next_id = 1
+        end
 
         write_file(goodbwhy.container .. "/" .. self.path .. "/" .. next_id .. ".json", json_data)
     end
+end
+
+function goodbwhy.dir:get_ids()
+    local get_next_file = fs.scandir(goodbwhy.container .. "/" .. self.path)
+    local ids = {}
+
+    while true do
+        local entry = get_next_file()
+
+        if not entry then break end                                            -- Break loop if we can't find a file
+
+        table.insert(ids, tonumber(entry.name:sub(0, #entry.name - 5)))
+    end
+
+    table.sort(ids)
+    return ids
 end
 
 function goodbwhy.dir:get_by_id(id)
@@ -96,7 +103,7 @@ end
 function goodbwhy.dir:get_by_value(key, value)                                 -- O(n^2)... Ughhh
     assert(type(key) == "string", "Key must be a string")
 
-    local existing_ids = get_ids(goodbwhy.container .. "/" .. self.path)
+    local existing_ids = self:get_ids()
     local parsed_ids = {}
 
     for _, id in pairs(existing_ids) do
@@ -114,9 +121,15 @@ function goodbwhy.dir:delete(id)
     fs.rmrf(goodbwhy.container .. "/" .. self.path .. "/" .. id .. ".json")
 end
 
-function goodbwhy.dir:update(id, data)
-    self:delete(id)
-    self:insert(data, id)
+function goodbwhy.dir:update(id, datas)
+    local old_data = read_decoded(goodbwhy.container .. "/" .. self.path .. "/" .. id .. ".json")
+
+    for index, value in pairs(datas) do
+        print(index, value)
+        old_data[index] = value
+    end
+
+    self:insert(old_data, id)
 end
 
 return goodbwhy

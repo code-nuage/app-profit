@@ -3,9 +3,8 @@ local json = require("json")
 local model_user = require("../Models/user")
 
 local user = {}
-local user_path = "Database/Users/"
 
-local function assert_user_format(json_data)
+local function assert_create_format(json_data)
     local data = json.decode(json_data)
     if type(data.name) == "string" and
     type(data.password) == "string" and
@@ -23,23 +22,36 @@ local function assert_user_format(json_data)
     end
 end
 
+local function assert_update_format(json_data)
+    local data = json.decode(json_data)
+    if (type(data.name) == "string" or type(data.name) == "nil") and           -- AND priority is higher than OR
+    (type(data.password) == "string" or type(data.password) == "nil") and
+    (type(data.birth) == "string" or type(data.birth) == "nil") and
+    (type(data.role) == "string" or type(data.role) == "nil") then
+        if data.birth and not data.birth:match("^%d%d%d%d%-%d%d%-%d%d$") then  -- Since strings are truthy, we don't need anything else
+            print("Bad date format")
+            return false
+        end
+        if data.role and not (data.role == "USER" or data.role == "ADMIN") then
+            print("Bad role name")
+            return false
+        end
+        return true
+    end
+end
+
+--+ CREATE +--
 function user.create(json_data)
-    if assert_user_format(json_data) then
+    if assert_create_format(json_data) then
         local data = json.decode(json_data)
         data = model_user.create(data)
-        local file = io.open(user_path .. data.id .. ".json", "w+")
 
-        if file then
-            local final_data = json.encode(data)
-            file:write(final_data)
-            file:close()
-
-            return "Created user\n" .. final_data, 200
-        end
+        return "Created user\n" .. json.encode(data), 200
     end
     return "Bad data format", 400
 end
 
+--+ READ +--
 function user.read(id)
     local json_data = model_user.read(id)
     if json_data then
@@ -49,20 +61,26 @@ function user.read(id)
 end
 
 function user.read_all()
-    local id_list = model_user.list_id()
-    local data_list = {}
-
-    for _, id in pairs(id_list) do
-        local json_data = json.decode(model_user.read(id))
-        table.insert(data_list, json_data)
+    local json_datas = model_user.read_all()
+    if json_datas then
+        return json_datas, 200
     end
-
-    local json_data_list = json.encode(data_list)
-    return json_data_list, 200
+    return json.encode({error = "No user found"}), 404
 end
 
+--+ UPDATE +--
 function user.update(id, json_data)
+    if assert_update_format(json_data) then
+        local data = model_user.update(id, json.decode(json_data))
+        return "Updated user " .. id .. "\n" .. data, 200
+    end
+    return json.encode({error = "Bad data format"}), 400
+end
 
+--+ DELETE +--
+function user.delete(id)
+    model_user.delete(id)
+    return "Deleted user " .. id, 200
 end
 
 return user
