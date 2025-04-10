@@ -4,3 +4,5 @@ back/deps/*
 
 back/Database/Users/*
 !back/Database/Users/.gitkeep
+
+front/node_modules
