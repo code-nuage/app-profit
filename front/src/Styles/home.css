@@ -3,3 +3,18 @@ body {
     background: rgb(93,25,255);
     background: linear-gradient(135deg, rgba(93,25,255,1) 0%, rgba(77,0,255,1) 50%, rgba(54,0,182,1) 100%);
 }
+
+.white-noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 1;
+}
+
+section#home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}

@@ -1,7 +1,6 @@
 import HomeController from './Controllers/Home.js';
 
-import './Styles/simpliestui.css';
-import './Styles/simpliestui-additions.css';
+import './Styles/profit-design-system.css';
 
 const controller = new HomeController();
 controller.render();
