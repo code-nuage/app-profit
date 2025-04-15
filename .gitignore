@@ -1,6 +1,4 @@
 back/deps/*
-!back/deps/sha256.lua
-!back/deps/goo-db-why.lua
 
 back/Database/Users/*
 !back/Database/Users/.gitkeep

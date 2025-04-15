@@ -1,96 +1,178 @@
 local json = require("json")
 
-local model_user = require("../Models/user")
+local http_code = require("../Utils/http-code")
+local mime = require("../Utils/mime")
 
-local user = {}
+local model = require("../Models/user")
 
-local function assert_create_format(data)
-    if data then
-        if type(data.name) == "string" and
-        type(data.password) == "string" and
-        type(data.birth) == "string" and
-        type(data.role) == "string" then
-            if not data.birth:match("^%d%d%d%d%-%d%d%-%d%d$") then
-                print("Bad date format")
-                return false
-            end
-            if not (data.role == "USER" or data.role == "ADMIN") then
-                print("Bad role name")
-                return false
-            end
-            return true
-        end
-        return false
+--+ FORMAT CHECKING FUNCTIONS +--
+local function is_create_format_valid(data)
+    if type(data) ~= "table" then
+        return false, "Invalid data format"
     end
-    return false
+
+    if type(data.name) ~= "string" or
+    #data.name < 4 or
+    #data.name > 16 then
+        return false, "Invalid name: must be between 4 and 16 characters"
+    end
+
+    if type(data.password) ~= "string" or
+    #data.password < 8 or
+    #data.password > 24 then
+        return false, "Invalid password: must be between 8 and 24 characters"
+    end
+
+    if type(data.birthdate) ~= "string" then
+        return false, "Invalid birthdate: must be a string"
+    end
+
+    if data.role ~= "USER" and data.role ~= "ADMIN" then
+        return false, "Invalid role: must be USER or ADMIN"
+    end
+
+    return true
 end
 
-local function assert_update_format(data)
-    if data then
-        if (type(data.name) == "string" or type(data.name) == "nil") and       -- AND priority is higher than OR
-        (type(data.password) == "string" or type(data.password) == "nil") and
-        (type(data.birth) == "string" or type(data.birth) == "nil") and
-        (type(data.role) == "string" or type(data.role) == "nil") then
-            if data.birth and 
-            not data.birth:match("^%d%d%d%d%-%d%d%-%d%d$") then                -- Since strings are truthy, we don't need anything else
-                print("Bad date format")
-                return false
-            end
-            if data.role and 
-            not (data.role == "USER" or data.role == "ADMIN") then
-                print("Bad role name")
-                return false
-            end
-            return true
-        end
+local function is_update_format_valid(data)
+    if type(data) ~= "table" then
+        return false, "Invalid data format"
     end
+
+    if data.name and
+    (type(data.name) ~= "string" or
+    #data.name < 4 or
+    #data.name > 16) then
+        return false, "Invalid name: must be between 4 and 16 characters"
+    end
+
+    if data.password and
+    (type(data.password) ~= "string" or
+    #data.password < 8 or
+    #data.password > 24) then
+        return false, "Invalid password: must be between 8 and 24 characters"
+    end
+
+    if data.birthdate and
+    type(data.birthdate) ~= "string" then
+        return false, "Invalid birthdate: must be a string"
+    end
+
+    if data.role and
+    (data.role ~= "USER" and data.role ~= "ADMIN") then
+        return false, "Invalid role: must be USER or ADMIN"
+    end
+
+    return true
 end
+
+--+     CONTROLLER     +--
+local controller = {}
 
 --+ CREATE +--
-function user.create(json_data)
+function controller.create(json_data)
     local data = json.decode(json_data)
-    if data then
-        if assert_create_format(data) then
-            data = model_user.create(data)
 
-            return json.encode(data), 200
-        end
-        return json.encode({error = "Bad data format"}), 400
+    local ok, err = is_create_format_valid(data)
+
+    if not ok then
+        return json.encode({error = err}),
+        http_code.BAD_REQUEST,
+        mime.json
     end
-    return json.encode({error = "Unable to decode data"}), 500
+
+    local returned_data = model.create(data)
+
+    if returned_data then
+        return json.encode(returned_data),
+        http_code.SUCCESS,
+        mime.json
+    end
+
+    return json.encode({error = "Decoding error: Can't create user"}),
+    http_code.SERVER_ERROR,
+    mime.json
 end
 
 --+ READ +--
-function user.read(id)
-    local json_data = model_user.read(id)
-    if json_data then
-        return json_data, 200
+function controller.read_by_id(id)
+    local data = model.get_by_id(id)
+
+    if data then
+        return json.encode(data),
+        http_code.SUCCESS,
+        mime.json
     end
-    return json.encode({error = "User not found"}), 404
+
+    return json.encode({error = "User " .. id .. " not found"}),
+    http_code.NOT_FOUND,
+    mime.json
 end
 
-function user.read_all()
-    local json_datas = model_user.read_all()
-    if json_datas then
-        return json_datas, 200
+function controller.read_all()
+    local data = model.get_all()
+
+    if data then
+        return json.encode(data),
+        http_code.SUCCESS,
+        mime.json
     end
-    return json.encode({error = "No user found"}), 404
+
+    return json.encode({error = "No user found"}),
+    http_code.NOT_FOUND,
+    mime.json
 end
 
 --+ UPDATE +--
-function user.update(id, json_data)
-    local data = json.decode(json_data)
-    if assert_update_format(data) then
-        data = model_user.update(id, json.decode(json_data))
-        return "Updated user " .. id .. "\n" .. data, 200
+function controller.update_by_id(id, json_data)
+    if not model.get_by_id(id) then
+        return json.encode({error = "User " .. id .. " not found."}),
+        http_code.NOT_FOUND,
+        mime.json
     end
-    return json.encode({error = "Bad data format"}), 400
+
+    local data = json.decode(json_data)
+
+    local ok, err = is_update_format_valid(data)
+
+    if not ok then
+        return json.encode({error = err}),
+        http_code.BAD_REQUEST,
+        mime.json
+    end
+
+    local returned_data = model.update_by_id(id, data)
+
+    if returned_data then
+        return json.encode({result = "User " .. id .. " updated."}),
+        http_code.SUCCESS,
+        mime.json
+    end
+
+    return json.encode({error = "Can't update user " .. id .. "."}),
+    http_code.SERVER_ERROR,
+    mime.json
 end
 
 --+ DELETE +--
-function user.delete(id)
-    model_user.delete(id)
-    return "Deleted user " .. id, 200
+function controller.delete(id)
+    if not model.get_by_id(id) then
+        return json.encode({error = "User " .. id .. " not found."}),
+        http_code.NOT_FOUND,
+        mime.json
+    end
+
+    local returned_data = model.delete(id)
+
+    if returned_data then
+        return json.encode({result = "User " .. id .. " deleted."}),
+        http_code.SUCCESS,
+        mime.json
+    end
+
+    return json.encode({error = "Can't delete user " .. id .. "."}),
+    http_code.SERVER_ERROR,
+    mime.json
 end
 
-return user
+return controller

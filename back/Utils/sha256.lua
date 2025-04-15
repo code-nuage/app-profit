@@ -8,9 +8,6 @@
 --  Found Here: https://bitbucket.org/Boolsheet/bslf/src/1ee664885805/bit.lua
 --  
 
---  code-nuage here
---  Giving credits to https://github.com/MaHuJa for its adaptation of SHA256 originally for Computer Craft
-
 local MOD = 2^32
 local MODM = MOD-1
 

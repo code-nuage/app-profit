@@ -1,60 +1,38 @@
-local json = require("json")
-local sha256 = require("sha256")
-local goodbwhy = require("goo-db-why")
+local goodbwhy = require("../Utils/goo-db-why")
+local sha256 = require("../Utils/sha256")
 
-goodbwhy.select_db("Database")
-local dir = goodbwhy.select("Users")
-local date_format = "%Y-%m-%d %H:%M:%S"
+goodbwhy.select_database("Database")
 
-local user = {}
+local function get_time()
+    return os.date("%Y-%m-%d %H:%M:%S")
+end
 
-function user.create(data)
-    data.password = sha256(data.password)                                      -- Hash the password to store it hashed in the database
-    data.created_at = os.date(date_format)
+local model = {}
+
+function model.create(data)
+    data.password = sha256(data.password)
+    data.created_at = get_time()
     data.updated_at = data.created_at
 
-    dir:insert(data)
-
-    return data
+    return goodbwhy.dir.select("Users"):insert(data)
 end
 
-function user.read(id)
-    local data = dir:get_by_id(id)
-    local json_data = json.encode(data)
-
-    return json_data
+function model.get_by_id(id)
+    return goodbwhy.dir.select("Users"):where_id(id):get()
 end
 
-function user.read_all()
-    local ids = dir:get_ids()
-    local datas = {}
-    for _, id in ipairs(ids) do
-        local data = dir:get_by_id(id)
-        table.insert(datas, data)
-    end
-
-    if #datas > 0 then
-        local json_datas = json.encode(datas)
-
-        return json_datas
-    end
-    return false
+function model.get_all()
+    return goodbwhy.dir.select("Users"):get()
 end
 
-function user.update(id, data)
-    if data.password then
-        data.password = sha256(data.password)                                      -- Hash the password to store it hashed in the database
-    end
-    data.updated_at = os.date(date_format)
+function model.update_by_id(id, data)
+    data.updated_at = get_time()
 
-    dir:update(id, data)
-
-    local json_data = json.encode(data)
-    return json_data
+    return goodbwhy.dir.select("Users"):where_id(id):update(data)
 end
 
-function user.delete(id)
-    dir:delete(id)
+function model.delete(id)
+    return goodbwhy.dir.select("Users"):where_id(id):delete()
 end
 
-return user
+return model
