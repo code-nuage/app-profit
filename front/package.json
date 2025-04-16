@@ -203,6 +203,8 @@
     "run-applescript": "^7.0.0",
     "safe-buffer": "^5.2.1",
     "safer-buffer": "^2.1.2",
+    "sass": "^1.86.3",
+    "sass-loader": "^16.0.5",
     "schema-utils": "^4.3.0",
     "select-hose": "^2.0.0",
     "selfsigned": "^2.4.1",

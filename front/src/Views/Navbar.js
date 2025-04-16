@@ -1,7 +1,5 @@
 import NavbarTemplate from '../Templates/Navbar.html';
 
-import '../Styles/navbar.css';
+import '../Styles/navbar.scss';
 
-export default `
-            ${NavbarTemplate}
-        `;
+export default `${NavbarTemplate}`;

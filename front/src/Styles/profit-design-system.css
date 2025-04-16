@@ -34,14 +34,14 @@ a:hover {
 }
 
 :root {
-    --color-primary: #4d00ff;
-    --color-secondary: #1e96fc;
-    --color-tertiary: #d6d4e3;
-    --color-positive: #0efB89;
-    --color-negative: #bf1a2f;
-    --color-accent: #dd57bc;
-    --color-light: #ffffff;
-    --color-dark: #2a1e28;
+    --color-primary: #4D00FF;
+    --color-secondary: #7B63FF;
+    --color-tertiary: #E6D4E3;
+    --color-positive: #0EFB89;
+    --color-negative: #BF1A2F;
+    --color-accent: #DF57BC;
+    --color-light: #FFFFFF;
+    --color-dark: #2A1E28;
 }
 
 /* --+ CONTAINER +-- */
@@ -82,7 +82,7 @@ a:hover {
 
 /* --+ COLORS +-- */
 .pds-color-primary, .pds-color-blue { color: var(--color-primary); }
-.pds-color-secondary, .pds-color-dodgerblue { color: var(--color-secondary); }
+.pds-color-secondary, .pds-color-mediumslateblue { color: var(--color-secondary); }
 .pds-color-tertiary, .pds-color-palepurple { color: var(--color-tertiary); }
 .pds-color-positive, .pds-color-springgreen { color: var(--color-positive); }
 .pds-color-negative, .pds-color-redncs { color: var(--color-negative); }
@@ -91,11 +91,11 @@ a:hover {
 .pds-color-dark, .pds-color-coal { color: var(--color-dark); }
 
 .pds-bg-color-primary, .pds-bg-color-blue { background-color: var(--color-primary); color: var(--color-light); }
-.pds-bg-color-secondary, .pds-bg-color-dodgerblue { background-color: var(--color-secondary); color: var(--color-dark); }
+.pds-bg-color-secondary, .pds-bg-color-mediumslateblue { background-color: var(--color-secondary); color: var(--color-light); }
 .pds-bg-color-tertiary, .pds-bg-color-palepurple { background-color: var(--color-tertiary); color: var(--color-dark); }
 .pds-bg-color-positive, .pds-bg-color-springgreen { background-color: var(--color-positive); color: var(--color-light); }
 .pds-bg-color-negative, .pds-bg-color-redncs { background-color: var(--color-negative); color: var(--color-light); }
-.pds-bg-color-accent, .pds-bg-color-rosepink { background-color: var(--color-accent); color: var(--color-dark); }
+.pds-bg-color-accent, .pds-bg-color-rosepink { background-color: var(--color-accent); color: var(--color-light); }
 .pds-bg-color-light, .pds-bg-color-white { background-color: var(--color-light); color: var(--color-dark); }
 .pds-bg-color-dark, .pds-bg-color-coal { background-color: var(--color-dark); color: var(--color-light); }
 

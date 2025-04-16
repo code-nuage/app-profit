@@ -2,9 +2,7 @@ import NavbarView from '../Views/Navbar.js';
 import HomeView from '../Views/Home.js';
 
 import WhiteNoise from '../Assets/white-noise.png';
-import Capote from '../Assets/capote.svg';
-
-import '../Styles/home.css';
+import Icon from '../Assets/icon.png';
 
 export default class HomeController {
     constructor() {
@@ -13,10 +11,9 @@ export default class HomeController {
 
     render() {
         this.app.innerHTML = `
-            <img src='${WhiteNoise}' class="white-noise">
             ${NavbarView}
             ${HomeView}
-        `;
-        document.querySelector('.capote').src = Capote;
+        `.replace("{{Icon}}", Icon)
+        .replace("{{WhiteNoise}}", WhiteNoise);
     }
 }
