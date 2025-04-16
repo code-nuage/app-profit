@@ -1,0 +1,6 @@
+{
+    "name":"string between 4 and 16 characters",
+    "password":"string between 8 and 24 characters",
+    "birthdate":"string: YYYY-MM-DD",
+    "role":"string: USER or ADMIN"
+}

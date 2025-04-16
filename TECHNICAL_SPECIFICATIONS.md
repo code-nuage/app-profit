@@ -33,8 +33,9 @@ Back-end
 
 Front-end
 - Node.js : Serveur de build pour les outils JS, logique complémentaire si besoin côté serveur
-  - React : Application SPA pour l'interface utilisateur
+  - Webpack + MVC : Application SPA pour l'interface utilisateur
     - Configuration dynamique du préservatif via une interface fluide
+  - Sass : CSS Wrapper pour plus de dynamisme dans le code du style de l'application
   - Three.js : Visualisation 3D en temps réel de la personnalisation du produit
     - Changement de couleur, texture, ajout de labels visuels
     - Animation de rotation et zoom pour voir le produit sous tous les angles
