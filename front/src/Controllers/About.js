@@ -1,6 +1,6 @@
 import WhiteNoiseView from '../Views/WhiteNoise.js';
 import NavbarView from '../Views/Navbar.js';
-import HomeView from '../Views/Home.js';
+import AboutView from '../Views/About.js';
 
 export default class HomeController {
     constructor() {
@@ -11,7 +11,7 @@ export default class HomeController {
         this.app.innerHTML = `
             ${WhiteNoiseView}
             ${NavbarView}
-            ${HomeView}
+            ${AboutView}
         `;
     }
 }

@@ -1,3 +1,4 @@
+const historyApiFallback = require('connect-history-api-fallback');
 const path = require('path');
 
 module.exports = {
@@ -9,6 +10,7 @@ module.exports = {
   },
   mode: 'development',
   devServer: {
+    historyApiFallback: true,
     static: './dist',
     open: true,
     hot: true,

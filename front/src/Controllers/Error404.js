@@ -1,8 +1,8 @@
 import WhiteNoiseView from '../Views/WhiteNoise.js';
 import NavbarView from '../Views/Navbar.js';
-import HomeView from '../Views/Home.js';
+import Error404View from '../Views/Error404.js';
 
-export default class HomeController {
+export default class Error404Controller {
     constructor() {
         this.app = document.querySelector('#app');
     }
@@ -11,7 +11,7 @@ export default class HomeController {
         this.app.innerHTML = `
             ${WhiteNoiseView}
             ${NavbarView}
-            ${HomeView}
+            ${Error404View}
         `;
     }
 }
