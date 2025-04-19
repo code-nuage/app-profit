@@ -20,13 +20,11 @@ const Router = class Router {
 
       if (route.url === this.path) {
         const ControllerPath = route.controller;
-        const Controller = new ControllerPath(this.params);
-        Controller.render()
+        new ControllerPath(this.params);
         return;
       }
     }
-    const Controller = new ControllerError404();
-    Controller.render()
+    new ControllerError404();
   }
 
   run() {

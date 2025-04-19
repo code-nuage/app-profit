@@ -1,3 +1,5 @@
+import Config from './config.js';
+
 import Router from './router.js';
 
 import HomeController from './Controllers/Home.js';

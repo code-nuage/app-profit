@@ -5,6 +5,25 @@ local mime = require("../Utils/mime")
 
 local model = require("../Models/user")
 
+--+ FORMAT CHECKING HELPERS +--
+local function is_valid_date(date)
+    if type(date) ~= "string" then return false end
+    local year, month, day = date:match("^(%d%d%d%d)%-(%d%d)%-(%d%d)$")
+    if not year or not month or not day then
+        return false
+    end
+    year, month, day = tonumber(year), tonumber(month), tonumber(day)
+    if not year or not month or not day then
+        return false
+    end
+    return month >= 1 and month <= 12 and day >= 1 and day <= 31
+end
+
+local function is_valid_email(email)
+    if type(email) ~= "string" then return false end
+    return email:match("^[%w%.%-_]+@[%w%-_]+%.%w%w+$") ~= nil
+end
+
 --+ FORMAT CHECKING FUNCTIONS +--
 local function is_create_format_valid(data)
     if type(data) ~= "table" then
@@ -23,8 +42,12 @@ local function is_create_format_valid(data)
         return false, "Invalid password: must be between 8 and 24 characters"
     end
 
-    if type(data.birthdate) ~= "string" then
-        return false, "Invalid birthdate: must be a string"
+    if not is_valid_date(data.birthdate) then
+        return false, "Invalid birthdate: must be in YYYY-MM-DD format"
+    end
+
+    if not is_valid_email(data.email) then
+        return false, "Invalid email format"
     end
 
     if data.role ~= "USER" and data.role ~= "ADMIN" then
@@ -53,9 +76,12 @@ local function is_update_format_valid(data)
         return false, "Invalid password: must be between 8 and 24 characters"
     end
 
-    if data.birthdate and
-    type(data.birthdate) ~= "string" then
-        return false, "Invalid birthdate: must be a string"
+    if data.birthdate and not is_valid_date(data.birthdate) then
+        return false, "Invalid birthdate: must be in YYYY-MM-DD format"
+    end
+
+    if data.email and not is_valid_email(data.email) then
+        return false, "Invalid email format"
     end
 
     if data.role and

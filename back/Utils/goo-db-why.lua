@@ -159,6 +159,8 @@ function goodbwhy.dir:get()
 
     if #datas == 0 then
         return nil
+    elseif #datas == 1 then
+        return datas[1]
     end
 
     return datas

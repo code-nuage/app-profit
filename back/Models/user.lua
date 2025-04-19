@@ -1,7 +1,9 @@
 local goodbwhy = require("../Utils/goo-db-why")
 local sha256 = require("../Utils/sha256")
 
-goodbwhy.select_database("Database")
+local config = require("../config")
+
+goodbwhy.select_database(config.database.name)
 
 local function get_time()
     return os.date("%Y-%m-%d %H:%M:%S")
