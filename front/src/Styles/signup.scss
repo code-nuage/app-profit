@@ -21,7 +21,7 @@ section#signup {
                 background: transparent;
                 outline: none;
             }
-            input#name, input#email, input#birthdate, input#password {
+            input#name, input#email, input#birthdate, input#password, input#password-confirm {
                 margin-left: 8px;
             }
         }

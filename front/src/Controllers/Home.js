@@ -5,6 +5,11 @@ import HomeView from '../Views/Home.js';
 export default class HomeController {
     constructor() {
         this.app = document.querySelector('#app');
+        this.run();
+    }
+
+    run() {
+        this.render();
     }
 
     render() {
