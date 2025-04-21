@@ -1,5 +1,7 @@
 import Config from '../config.js';
 
+import NotificationController from '../Controllers/Notification.js';
+
 export default async function() {
     const name = document.querySelector('#name').value;
     const email = document.querySelector('#email').value;
@@ -30,11 +32,14 @@ export default async function() {
         })
 
         const result = await response.json();
+        console.log(response.headers);
+        console.log(response.status);
+        console.log(result);
 
-        if (response.ok) {
-            alert("Registered.");
+        if (response.status == 200) {
+            new NotificationController("Inscription", "Utilisateur créé.", "primary");
         } else {
-            alert("Error: " + result.error);
+            new NotificationController("Inscription", result.error, "negative");
         }
     } catch(error) {
         alert('Can\'t connect to backend server: ' + error);

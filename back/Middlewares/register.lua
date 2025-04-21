@@ -14,9 +14,12 @@ return function(json_data)
             http_code.BAD_REQUEST,
             mime.json
         end
-        return controller.create(json_data),
-        http_code.SUCCESS,
-        mime.json
+
+        local returned_data, returned_code, returned_mime = controller.create(json_data);
+
+        return returned_data,
+        returned_code,
+        returned_mime
     end
 
     return json.encode({error = "Can't decode data"}),

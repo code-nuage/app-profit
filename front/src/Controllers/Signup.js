@@ -14,6 +14,7 @@ export default class HomeController {
         this.render();
         document.querySelector('form').addEventListener('submit', async function(event) {
             event.preventDefault();
+            
             SignupModel();
         })
     }
