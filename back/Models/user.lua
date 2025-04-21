@@ -27,6 +27,22 @@ function model.get_all()
     return goodbwhy.dir.select("Users"):get()
 end
 
+function model.user_exists(email)
+    local data = goodbwhy.dir.select("Users"):where("email", email):get()
+    if data then
+        return true                                                            -- User exists
+    end
+end
+
+function model.is_password_valid(email, password)
+    local data = goodbwhy.dir.select("Users"):where("email", email):get()
+    if data then
+        if sha256(password) == data.password then
+            return true                                                        -- Password is valid
+        end
+    end
+end
+
 function model.update_by_id(id, data)
     data.updated_at = get_time()
 

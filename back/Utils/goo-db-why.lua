@@ -78,7 +78,7 @@ function goodbwhy.dir:get_file_by_id(id)
     return self.path .. "/" .. id .. ".json"
 end
 
-function goodbwhy.dir:get_ids()
+function goodbwhy.dir:get_all_ids()
     local get_next_file = fs.scandir(self.path)
     local ids = {}
 
@@ -100,7 +100,7 @@ end
 --+ FILTERING +--
 function goodbwhy.dir:where(key, value)
     assert(type(key) == "string", "Key must be a string.")
-    self.ids = self.ids or self:get_ids()
+    self.ids = self.ids or self:get_all_ids()
 
     local filtered_ids = {}
     for _, id in ipairs(self.ids) do
@@ -126,7 +126,7 @@ function goodbwhy.dir:insert(data, id)
 
     local next_id = id
     if not next_id then
-        local ids = self:get_ids()
+        local ids = self:get_all_ids()
         local last_id = ids[#ids]
         next_id = last_id and (last_id + 1) or 1
     end
@@ -144,7 +144,7 @@ function goodbwhy.dir:insert(data, id)
 end
 
 function goodbwhy.dir:get()
-    local ids = self.ids or self:get_ids()
+    local ids = self.ids or self:get_all_ids()
     if #ids == 0 then
         return nil
     end
@@ -164,6 +164,12 @@ function goodbwhy.dir:get()
     end
 
     return datas
+end
+
+function goodbwhy.dir:get_ids()
+    local ids = self.ids or self:get_all_ids()
+
+    return ids
 end
 
 function goodbwhy.dir:update(data)
@@ -189,7 +195,7 @@ function goodbwhy.dir:update(data)
 end
 
 function goodbwhy.dir:delete()
-    local ids = self.ids or self:get_ids()
+    local ids = self.ids or self:get_all_ids()
     if #ids == 0 then
         return false
     end

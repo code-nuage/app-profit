@@ -8,9 +8,12 @@ local http = require("http")
 
 local weblit = require("weblit")
 
-local config = require("config")
+local config = require("./config")
 
 require("./Utils/startup")()                                                   -- First startup
+
+local register_route = require("./Routes/register")
+local login_route = require("./Routes/login")
 
 local user_route = require("./Routes/user")
 local category_route = require("./Routes/category")
@@ -32,6 +35,9 @@ local app = weblit.app.bind({host = config.server.host, port = config.server.por
 
     next()
 end)
+
+register_route(app)
+login_route(app)
 
 user_route(app)
 category_route(app)
