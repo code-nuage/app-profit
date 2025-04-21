@@ -4,5 +4,8 @@ import AccountIcon from '../Assets/account.svg';
 
 import '../Styles/navbar.scss';
 
-export default `${NavbarTemplate}`
+let View = `${NavbarTemplate}`
+.replace("{{UserName}}", "")
 .replace("{{AccountIcon}}", AccountIcon);
+
+export default View;

@@ -1,5 +1,9 @@
 back/deps/*
 
+back/Database/Configuration/*
+!back/Database/Configuration/.gitkeep
+!back/Database/Configuration/.pattern.json
+
 back/Database/Users/*
 !back/Database/Users/.gitkeep
 !back/Database/Users/.pattern.json
@@ -7,9 +11,5 @@ back/Database/Users/*
 back/Database/Categories/*
 !back/Database/Categories/.gitkeep
 !back/Database/Categories/.pattern.json
-
-back/Database/Users/*
-!back/Database/Users/.gitkeep
-!back/Database/Users/.pattern.json
 
 front/node_modules
