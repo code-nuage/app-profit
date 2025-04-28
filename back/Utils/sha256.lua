@@ -7,6 +7,7 @@
 --  Using an adapted version of the bit library
 --  Found Here: https://bitbucket.org/Boolsheet/bslf/src/1ee664885805/bit.lua
 --  
+--  Adaptation to implements it in a luvit server by code-nuage
 
 local MOD = 2^32
 local MODM = MOD-1
@@ -184,7 +185,7 @@ local function digestblock(msg, i, H)
 	H[8] = band(H[8] + h)
 end
 
--- Made this global
+-- Return it
 return function(msg)
 	msg = preproc(msg, #msg)
 	local H = initH256({})

@@ -135,6 +135,20 @@ function controller.read_by_id(id)
     mime.json
 end
 
+function controller.read_by_email(email)
+    local data = model.get_by_email(email)
+
+    if data then
+        return json.encode(data),
+        http_code.SUCCESS,
+        mime.json
+    end
+
+    return json.encode({error = "User with email" .. email .. " not found"}),
+    http_code.NOT_FOUND,
+    mime.json
+end
+
 function controller.read_all()
     local data = model.get_all()
 

@@ -25,8 +25,16 @@ export default class NotificationController {
 
         this.container = document.querySelector('#notification');
 
+        this.close = this.container.querySelector("#close");
+
+        this.close.addEventListener("click", (e) => {
+            this.container.remove()
+        })
+
         setTimeout(() => {
-            this.container.remove();
+            if (this.container) {
+                this.container.remove();
+            }
         }, 5000);
     }
 

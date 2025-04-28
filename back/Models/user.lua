@@ -23,6 +23,10 @@ function model.get_by_id(id)
     return goodbwhy.dir.select("Users"):where_id(id):get()
 end
 
+function model.get_by_email(email)
+    return goodbwhy.dir.select("Users"):where("email", email):get()
+end
+
 function model.get_all()
     return goodbwhy.dir.select("Users"):get()
 end
