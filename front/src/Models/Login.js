@@ -11,6 +11,7 @@ export default async function(controller) {
     try {
         const response = await fetch(`${Config.BACKEND_URL}:${Config.BACKEND_PORT}/login`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },

@@ -25,6 +25,7 @@ export default async function() {
     try {
         const response = await fetch(Config.BACKEND_URL + ':' + Config.BACKEND_PORT + "/register", {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },

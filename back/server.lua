@@ -22,7 +22,8 @@ local app = weblit.app.bind({host = config.server.host, port = config.server.por
 .use(weblit.logger)
 .use(weblit.autoHeaders)
 .use(function (req, res, next)
-    res.headers["Access-Control-Allow-Origin"] = "*"
+    local origin = req.headers["Origin"]
+    res.headers["Access-Control-Allow-Origin"] = origin
     res.headers["Access-Control-Allow-Methods"] = "GET, POST, PATCH, DELETE, OPTIONS"
     res.headers["Access-Control-Allow-Headers"] = "Content-Type"
     res.headers["Access-Control-Allow-Credentials"] = true
@@ -30,7 +31,6 @@ local app = weblit.app.bind({host = config.server.host, port = config.server.por
     if req.method == "OPTIONS" then                                            -- F*ck wat da hell, weblit does not support catch all paths... Got brainf*cked, never anymore
         res.code = 204
         res.body = ""
-
         return
     end
 

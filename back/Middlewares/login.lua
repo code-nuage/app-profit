@@ -1,9 +1,11 @@
 local json = require("json")
 local jwt = require("jwt")
 
+local secret = require("../secret")
+
 local http_code = require("../Utils/http-code")
 local mime = require("../Utils/mime")
-local secret = require("../secret")
+local cookiebuilder = require("../Utils/cookie-builder")
 
 local model = require("../Models/user")
 
@@ -16,14 +18,19 @@ return function(json_data)
                 local jwt_token = jwt.sign({email=data.email, password = data.password},
                 {secret = secret.secret_key})
 
+                local cookie = cookiebuilder("jwt", jwt_token,
+                {["Path"] = "/",
+                "HttpOnly",
+                "Secure",
+                ["SameSite"] = "None",
+                "Partitioned",
+                ["Max-Age"] = 1000 * 60 * 60 * 24})
+
+                print(cookie)
+
                 return json.encode({message = "You're logged in!"}),
                 http_code.SUCCESS,
-                "jwt=" .. jwt_token
-                .. "; HttpOnly; "
-                .. "Secure; "
-                .. "Path=/; "
-                .. "SameSite=Lax; "
-                .. "Max-Age=" .. 1000 * 60 * 60 * 24,                           -- Set the cookie
+                cookie,                                                        -- Set the cookie
                 mime.json
             end
             return json.encode({error = "Your password is wrong."}),
