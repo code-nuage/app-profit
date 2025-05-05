@@ -1,7 +1,7 @@
 local json = require("json")
 local jwt = require("jwt")
 
-local secret = require("../secret")
+local secret_key = require("../config").secret
 
 local http_code = require("../Utils/http-code")
 local mime = require("../Utils/mime")
@@ -15,8 +15,10 @@ return function(json_data)
     if data then
         if model.user_exists(data.email) then
             if model.is_password_valid(data.email, data.password) then
-                local jwt_token = jwt.sign({email=data.email, password = data.password},
-                {secret = secret.secret_key})
+                local hashed_password = model.get_by_email(data.email).password-- Don't store clear password in the JWT!
+                local jwt_token = jwt.sign(                                    -- Create the token with hashed password
+                {email = data.email, password = hashed_password},
+                {secret = secret_key})
 
                 local cookie = cookiebuilder("jwt", jwt_token,
                 {["Path"] = "/",
@@ -25,9 +27,7 @@ return function(json_data)
                 ["SameSite"] = "None",
                 "Partitioned",
                 ["Max-Age"] = 1000 * 60 * 60 * 24})
-
-                print(cookie)
-
+                
                 return json.encode({message = "You're logged in!"}),
                 http_code.SUCCESS,
                 cookie,                                                        -- Set the cookie

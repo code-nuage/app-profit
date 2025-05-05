@@ -6,7 +6,7 @@ return function(name, value, options)
     local cookie = name .. "=" .. value .. "; "
 
     for option_name, option_value in pairs(options) do
-        if type(option_name) == "number" then
+        if type(option_name) == "number" then                                  -- Checks if the value is simply stored in an indexed key (alone in the table)
             cookie = cookie .. option_value .. "; "
         else
             cookie = cookie .. option_name .. "=" .. option_value .. "; "

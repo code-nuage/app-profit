@@ -1,5 +1,8 @@
 local json = require("json")
+local jwt = require("jwt")
 
+local moreutils = require("../Utils/more-utils")
+local secret_key = require("../config").secret
 local http_code = require("../Utils/http-code")
 local mime = require("../Utils/mime")
 
@@ -147,6 +150,29 @@ function controller.read_by_email(email)
     return json.encode({error = "User with email" .. email .. " not found"}),
     http_code.NOT_FOUND,
     mime.json
+end
+
+function controller.me(cookie)
+    local jwt_token = cookie
+    local payload
+    local data
+
+    if jwt_token then
+        jwt_token, _ = jwt_token:gsub("jwt=", "")
+
+        payload = jwt.verify(jwt_token, {secret = secret_key})
+
+        print(moreutils.table.dump(payload))
+
+        if payload and payload.email then
+            data = controller.read_by_email(payload.email)
+            return data, http_code.SUCCESS, mime.json
+        end
+    else
+        return json.encode({error = "You are not connected"}),
+        http_code.USER_NOT_AUTHENTICATED,
+        mime.json
+    end
 end
 
 function controller.read_all()

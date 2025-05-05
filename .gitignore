@@ -12,6 +12,6 @@ back/Database/Categories/*
 !back/Database/Categories/.gitkeep
 !back/Database/Categories/.pattern.json
 
-back/secret.lua
+back/config.lua
 
 front/node_modules
