@@ -1,13 +1,4 @@
-local jwt = require("jwt")
-
-local moreutils = require("../Utils/more-utils")
-
-local secret_key = require("../config").secret
-
 local controller = require("../Controllers/user")
-
-local connection_middleware = require("../Middlewares/connection")
-local role_middleware = require("../Middlewares/role")
 
 return function(app)
     app.route({method = "POST", path = "/user"}, function(req, res)

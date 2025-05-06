@@ -1,25 +1,29 @@
 import LoginModel from '../Models/Login.js'; 
 
+import NavbarController from '../Controllers/Navbar.js';
+
 import WhiteNoiseView from '../Views/WhiteNoise.js';
-import NavbarView from '../Views/Navbar.js';
 import LoginView from '../Views/Login.js';
 
 export default class HomeController {
     constructor() {
         this.app = document.querySelector('#app');
+        this.app.innerHTML = `<header id="navbar"></header>
+<section id="login"></section>`
+        this.login = document.querySelector('#login')
         this.run();
     }
 
     run() {
+        new NavbarController();
         this.render();
 
         this.attachForm();
     }
 
     render() {
-        this.app.innerHTML = `
+        this.login.innerHTML += `
             ${WhiteNoiseView}
-            ${NavbarView}
             ${LoginView}
         `;
     }

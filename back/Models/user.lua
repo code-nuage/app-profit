@@ -44,7 +44,9 @@ function model.is_password_valid(email, password)
         if sha256(password) == data.password then
             return true                                                        -- Password is valid
         end
+        return false
     end
+    return false
 end
 
 function model.update_by_id(id, data)

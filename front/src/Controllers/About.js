@@ -13,7 +13,7 @@ export default class HomeController {
     }
 
     render() {
-        this.app.innerHTML = `
+        this.app.innerHTML += `
             ${WhiteNoiseView}
             ${NavbarView}
             ${AboutView}

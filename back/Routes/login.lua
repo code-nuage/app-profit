@@ -11,14 +11,14 @@ return function(app)
     app.route({method = "POST", path = "/login"}, function(req, res)
         if not connection_middleware(req) then
             local body, code, set_cookie, content_type = login_controller(req.body)
-    
+
             res.body = body
             res.code = code
-    
+
             if set_cookie then
                 res.headers["Set-Cookie"] = set_cookie
             end
-    
+
             if content_type then
                 res.headers["Content-Type"] = content_type
             end
@@ -28,17 +28,17 @@ return function(app)
             mime.json
         end
     end)
-    app.route({method = "POST", path = "/logout"}, function(req, res)
+    .route({method = "POST", path = "/logout"}, function(req, res)
         if connection_middleware(req) then
             local body, code, set_cookie, content_type = logout_controller(req.body)
 
             res.body = body
             res.code = code
-    
+
             if set_cookie then
                 res.headers["Set-Cookie"] = set_cookie
             end
-    
+
             if content_type then
                 res.headers["Content-Type"] = content_type
             end

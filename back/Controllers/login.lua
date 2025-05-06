@@ -27,7 +27,7 @@ return function(json_data)
                 ["SameSite"] = "None",
                 "Partitioned",
                 ["Max-Age"] = 1000 * 60 * 60 * 24})
-                
+
                 return json.encode({message = "You're logged in!"}),
                 http_code.SUCCESS,
                 cookie,                                                        -- Set the cookie

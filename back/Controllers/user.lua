@@ -1,7 +1,6 @@
 local json = require("json")
 local jwt = require("jwt")
 
-local moreutils = require("../Utils/more-utils")
 local secret_key = require("../config").secret
 local http_code = require("../Utils/http-code")
 local mime = require("../Utils/mime")
@@ -154,25 +153,28 @@ end
 
 function controller.me(cookie)
     local jwt_token = cookie
+    print(jwt_token)
     local payload
     local data
 
-    if jwt_token then
+    if jwt_token and not jwt_token == "jwt=" then
         jwt_token, _ = jwt_token:gsub("jwt=", "")
 
         payload = jwt.verify(jwt_token, {secret = secret_key})
 
-        print(moreutils.table.dump(payload))
+        print(payload)
 
         if payload and payload.email then
             data = controller.read_by_email(payload.email)
-            return data, http_code.SUCCESS, mime.json
+            if data then
+                return data, http_code.SUCCESS, mime.json
+            end
+            return json.encode({error = "You connection cookie is corrupted."}), http_code.ACCESS_DENIED, mime.json
         end
-    else
-        return json.encode({error = "You are not connected"}),
-        http_code.USER_NOT_AUTHENTICATED,
-        mime.json
     end
+    return json.encode({error = "You are not connected"}),
+    http_code.USER_NOT_AUTHENTICATED,
+    mime.json
 end
 
 function controller.read_all()

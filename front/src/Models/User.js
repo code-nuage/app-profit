@@ -12,11 +12,13 @@ export default async function() {
         const result = await response.json();
 
         if (response.ok) {
-            return result;
+            return true;
         } else {
             new NotificationController("Error", result.error, "negative");
+            return false;
         }
     } catch(error) {
         new NotificationController("Server Error", "Can't connect to the backend server", "negative");
+        return false;
     }
 }

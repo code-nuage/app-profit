@@ -22,7 +22,7 @@ local app = weblit.app.bind({host = config.server.host, port = config.server.por
 .use(weblit.logger)
 .use(weblit.autoHeaders)
 .use(function (req, res, next)
-    local origin = req.headers["Origin"]
+    local origin = req.headers["Origin"]                                       -- Set the allowed origin to the connection origin to avoid weird things with CORS and "*" allowed
     res.headers["Access-Control-Allow-Origin"] = origin
     res.headers["Access-Control-Allow-Methods"] = "GET, POST, PATCH, DELETE, OPTIONS"
     res.headers["Access-Control-Allow-Headers"] = "Content-Type"

@@ -19,18 +19,17 @@ export default async function(controller) {
         });
 
         const result = await response.json();
-        // console.log(result);
 
         if (response.ok) {
             new NotificationController("Connection", result.message, "accent");
 
-            window.location.replace(window.location.origin + "/account");      // Redirection to account page
+            window.location.redirect(window.location.origin + "/account");      // Redirection to account page
         } else {
             new NotificationController("Error", result.error, "negative");
         }
     } catch(error) {
         new NotificationController("Server Error", "Can't connect to the backend server", "negative");
     }
-
+    
     controller.attachForm();                                                   // Reattach the form since form reloads on post (??)
 }

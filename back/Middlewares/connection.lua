@@ -13,7 +13,6 @@ return function(req)
             local payload = assert(jwt.verify(jwt_token, {secret = secret_key}))
 
             if payload then
-                print("JWT valide")
                 return true
             end
         end

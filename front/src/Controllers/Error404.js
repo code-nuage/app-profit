@@ -13,7 +13,7 @@ export default class Error404Controller {
     }
 
     render() {
-        this.app.innerHTML = `
+        this.app.innerHTML += `
             ${WhiteNoiseView}
             ${NavbarView}
             ${Error404View}

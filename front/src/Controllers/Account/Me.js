@@ -1,13 +1,17 @@
-import WhiteNoiseView from '../../Views/WhiteNoise.js';
-import NavbarView from '../../Views/Navbar.js';
-import AccountMeView from '../../Views/Account/Me.js';
-
 import UserModel from '../../Models/User.js';
 import LogoutModel from '../../Models/Logout.js';
+
+import WhiteNoiseView from '../../Views/WhiteNoise.js';
+import AccountMeView from '../../Views/Account/Me.js';
+
+import NavbarController from '../../Controllers/Navbar.js';
 
 export default class HomeController {
     constructor() {
         this.app = document.querySelector('#app');
+        this.app.innerHTML = `<header id="navbar"></header>
+<section id="me"></section>`;
+        this.me = document.querySelector('#me');
         this.run();
     }
 
@@ -15,6 +19,7 @@ export default class HomeController {
         this.dataUser = await UserModel();
 
         this.render();
+        new NavbarController();
 
         document.querySelector('#logout').addEventListener('click', async function(event) {
             event.preventDefault();
@@ -24,9 +29,8 @@ export default class HomeController {
     }
 
     async render() {
-        this.app.innerHTML = `
+        this.me.innerHTML = `
             ${WhiteNoiseView}
-            ${NavbarView}
             ${AccountMeView(this.dataUser)}
         `;
     }
